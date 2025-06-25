@@ -45,6 +45,9 @@ namespace BilnexDesktopApp
             {
                 MessageBox.Show("AdminPanelForm açılacak");
             };
+            button5.Click += (s, e) => {
+                MessageBox.Show("AdminPanelForm açılacak");
+            };
         }
     }
 }
