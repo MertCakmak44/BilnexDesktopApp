@@ -16,6 +16,16 @@ namespace BilnexDesktopApp
             InitializeComponent();
             _token = token;
         }
+
+        // ✅ Tablodan veri alırsan bu metodla içeri doldur
+        public void FillCustomer(CustomerDto customer)
+        {
+            txtId.Text = customer.Id.ToString();
+            txtName.Text = customer.Name;
+            txtSname.Text = customer.Sname;
+            txtId.ReadOnly = true;
+        }
+
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(txtId.Text, out int id))
@@ -37,7 +47,7 @@ namespace BilnexDesktopApp
             var json = JsonSerializer.Serialize(updatedCustomer);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PutAsync($"api/customer/{id}", content); 
+            var response = await client.PutAsync($"api/customer/{id}", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -142,9 +152,13 @@ namespace BilnexDesktopApp
             PerformLayout();
         }
 
-        private void CustomerUpdateForm_Load(object sender, EventArgs e)
-        {
+        private void CustomerUpdateForm_Load(object sender, EventArgs e) { }
+    }
 
-        }
+    public class CustomerDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Sname { get; set; }
     }
 }

@@ -104,6 +104,22 @@ namespace BilnexDesktopApp
                 MessageBox.Show("Silme başarısız:\n" + error);
             }
         }
+        private void DgvCustomers_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var selectedCustomer = (CustomerDto)dgvCustomers.Rows[e.RowIndex].DataBoundItem;
+
+                var updateForm = new CustomerUpdateForm(_token);
+                updateForm.FillCustomer(selectedCustomer);
+
+                if (updateForm.ShowDialog() == DialogResult.OK)
+                {
+                    _ = LoadCustomersAsync();
+                }
+            }
+        }
+
 
         private DataGridView dgvCustomers;
         private Button button5;
@@ -116,13 +132,6 @@ namespace BilnexDesktopApp
             await LoadCustomersAsync();
         }
 
-        public class CustomerDto
-        {
-            public int Id { get; set; }         // EKLENDİ
-            public string Name { get; set; }
-            public string Sname { get; set; }
-        }
-
         private void InitializeComponent()
         {
             dgvCustomers = new DataGridView();
@@ -133,7 +142,7 @@ namespace BilnexDesktopApp
             ((System.ComponentModel.ISupportInitialize)dgvCustomers).BeginInit();
             SuspendLayout();
             this.Load += new EventHandler(CustomerForm_Load);
-
+            dgvCustomers.CellDoubleClick += DgvCustomers_CellDoubleClick;
             // 
             // dgvCustomers
             // 
