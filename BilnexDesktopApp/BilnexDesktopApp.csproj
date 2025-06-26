@@ -13,4 +13,10 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MyAppCore">
+      <HintPath>..\..\SqlToFile\MyApp.Core\bin\Debug\net8.0\MyAppCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

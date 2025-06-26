@@ -33,7 +33,8 @@ namespace BilnexDesktopApp
 
             button2.Click += (s, e) =>
             {
-                MessageBox.Show("StockForm açılacak");
+                var stockForm = new StockForm(_token); // Girişte aldığın tokenı burada kullan
+                stockForm.Show();
             };
 
             button3.Click += (s, e) =>
