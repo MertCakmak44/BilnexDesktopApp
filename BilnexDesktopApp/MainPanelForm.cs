@@ -48,7 +48,8 @@ namespace BilnexDesktopApp
                 MessageBox.Show("AdminPanelForm açılacak");
             };
             button5.Click += (s, e) => {
-                MessageBox.Show("AdminPanelForm açılacak");
+                var purchaseForm = new PurchaseForm(_token); // _token değişkeni varsa onu geçir
+                purchaseForm.ShowDialog();
             };
         }
     }
