@@ -39,7 +39,8 @@ namespace BilnexDesktopApp
 
             button3.Click += (s, e) =>
             {
-                MessageBox.Show("SalesForm açılacak");
+                var salesForm = new SalesForm(_token); // _token değişkeni varsa onu geçir
+                salesForm.ShowDialog();
             };
 
             button4.Click += (s, e) =>
