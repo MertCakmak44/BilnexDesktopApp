@@ -4,10 +4,13 @@
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.ComboBox cmbStock;
-        private System.Windows.Forms.NumericUpDown numQuantity;
+        private System.Windows.Forms.NumericUpDown numAmount;
         private System.Windows.Forms.Button btnPurchase;
+        private System.Windows.Forms.DataGridView dgvPurchases;
+        private System.Windows.Forms.TextBox txtTotal;
         private System.Windows.Forms.Label lblStock;
-        private System.Windows.Forms.Label lblQuantity;
+        private System.Windows.Forms.Label lblAmount;
+        private System.Windows.Forms.Label lblTotal;
 
         protected override void Dispose(bool disposing)
         {
@@ -18,76 +21,81 @@
 
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            cmbStock = new System.Windows.Forms.ComboBox();
-            numQuantity = new System.Windows.Forms.NumericUpDown();
-            btnPurchase = new System.Windows.Forms.Button();
-            lblStock = new System.Windows.Forms.Label();
-            lblQuantity = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
+            cmbStock = new ComboBox();
+            numAmount = new NumericUpDown();
+            btnPurchase = new Button();
+            dgvPurchases = new DataGridView();
+            txtTotal = new TextBox();
+            lblStock = new Label();
+            lblAmount = new Label();
+            lblTotal = new Label();
+
+            ((System.ComponentModel.ISupportInitialize)numAmount).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPurchases).BeginInit();
             SuspendLayout();
             // 
             // cmbStock
             // 
-            cmbStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cmbStock.FormattingEnabled = true;
-            cmbStock.Location = new System.Drawing.Point(120, 30);
-            cmbStock.Name = "cmbStock";
-            cmbStock.Size = new System.Drawing.Size(180, 23);
-            cmbStock.TabIndex = 0;
+            cmbStock.Location = new Point(100, 20);
+            cmbStock.Size = new Size(150, 23);
+            cmbStock.SelectedIndexChanged += cmbStock_SelectedIndexChanged;
             // 
-            // numQuantity
+            // numAmount
             // 
-            numQuantity.Location = new System.Drawing.Point(120, 70);
-            numQuantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numQuantity.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
-            numQuantity.Name = "numQuantity";
-            numQuantity.Size = new System.Drawing.Size(80, 23);
-            numQuantity.TabIndex = 1;
-            numQuantity.Value = 1;
+            numAmount.Location = new Point(100, 60);
+            numAmount.Minimum = 1;
+            numAmount.Maximum = 10000;
+            numAmount.Value = 1;
+            numAmount.ValueChanged += numAmount_ValueChanged;
             // 
             // btnPurchase
             // 
-            btnPurchase.Location = new System.Drawing.Point(120, 110);
-            btnPurchase.Name = "btnPurchase";
-            btnPurchase.Size = new System.Drawing.Size(120, 35);
-            btnPurchase.TabIndex = 2;
+            btnPurchase.Location = new Point(270, 40);
+            btnPurchase.Size = new Size(100, 30);
             btnPurchase.Text = "Satın Al";
-            btnPurchase.UseVisualStyleBackColor = true;
-            btnPurchase.Click += new System.EventHandler(this.btnPurchase_Click);
+            btnPurchase.Click += btnPurchase_Click;
+            // 
+            // dgvPurchases
+            // 
+            dgvPurchases.Location = new Point(20, 120);
+            dgvPurchases.Size = new Size(500, 200);
+            // 
+            // txtTotal
+            // 
+            txtTotal.Location = new Point(420, 340);
+            txtTotal.ReadOnly = true;
+            txtTotal.Size = new Size(100, 23);
             // 
             // lblStock
             // 
-            lblStock.AutoSize = true;
-            lblStock.Location = new System.Drawing.Point(30, 33);
-            lblStock.Name = "lblStock";
-            lblStock.Size = new System.Drawing.Size(66, 15);
-            lblStock.TabIndex = 3;
-            lblStock.Text = "Ürün Seçin:";
+            lblStock.Text = "Ürün:";
+            lblStock.Location = new Point(20, 20);
             // 
-            // lblQuantity
+            // lblAmount
             // 
-            lblQuantity.AutoSize = true;
-            lblQuantity.Location = new System.Drawing.Point(30, 72);
-            lblQuantity.Name = "lblQuantity";
-            lblQuantity.Size = new System.Drawing.Size(45, 15);
-            lblQuantity.TabIndex = 4;
-            lblQuantity.Text = "Miktar:";
+            lblAmount.Text = "Adet:";
+            lblAmount.Location = new Point(20, 60);
+            // 
+            // lblTotal
+            // 
+            lblTotal.Text = "Toplam:";
+            lblTotal.Location = new Point(360, 340);
             // 
             // PurchaseForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(350, 180);
-            Controls.Add(lblQuantity);
-            Controls.Add(lblStock);
-            Controls.Add(btnPurchase);
-            Controls.Add(numQuantity);
+            ClientSize = new Size(560, 400);
             Controls.Add(cmbStock);
-            Name = "PurchaseForm";
+            Controls.Add(numAmount);
+            Controls.Add(btnPurchase);
+            Controls.Add(dgvPurchases);
+            Controls.Add(txtTotal);
+            Controls.Add(lblStock);
+            Controls.Add(lblAmount);
+            Controls.Add(lblTotal);
             Text = "Satın Alma Paneli";
-            Load += new System.EventHandler(this.PurchaseForm_Load);
-            ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
+            Load += PurchaseForm_Load;
+            ((System.ComponentModel.ISupportInitialize)numAmount).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvPurchases).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
