@@ -6,14 +6,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyAppCore.Dtos;
 
 namespace BilnexDesktopApp
 {
     public partial class PurchaseForm : Form
     {
         private readonly string _token;
-        private List<StockDto> _stocks;
 
         public PurchaseForm(string token)
         {
@@ -21,20 +19,9 @@ namespace BilnexDesktopApp
             _token = token;
         }
 
-        private void InitializeGrid()
-        {
-            dgvPurchases.Columns.Clear();
-            dgvPurchases.Columns.Add("Product", "Ürün");
-            dgvPurchases.Columns.Add("Price", "Fiyat");
-            dgvPurchases.Columns.Add("Quantity", "Adet");
-            dgvPurchases.Columns.Add("Total", "Tutar");
-        }
-
         private async void PurchaseForm_Load(object sender, EventArgs e)
         {
-            InitializeGrid();
             await LoadStocksAsync();
-            UpdateTotal();
         }
 
         private async Task LoadStocksAsync()
@@ -43,52 +30,42 @@ namespace BilnexDesktopApp
             client.BaseAddress = new Uri("https://localhost:7146/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await client.GetAsync("api/stock");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var json = await response.Content.ReadAsStringAsync();
-                _stocks = JsonSerializer.Deserialize<List<StockDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var response = await client.GetAsync("api/stock");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var stocks = JsonSerializer.Deserialize<List<StockDto>>(json, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
 
-                cmbStock.DataSource = _stocks;
-                cmbStock.DisplayMember = "Name";
-                cmbStock.ValueMember = "Id";
+                    dgvStockList.DataSource = stocks;
+                }
+                else
+                {
+                    MessageBox.Show("Stoklar alınamadı.");
+                }
             }
-        }
-
-        private void cmbStock_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateTotal();
-        }
-
-        private void numAmount_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateTotal();
-        }
-
-        private void UpdateTotal()
-        {
-            if (cmbStock.SelectedItem is StockDto stock)
+            catch (Exception ex)
             {
-                int quantity = (int)numAmount.Value;
-                int total = quantity * stock.Price;
-                txtTotal.Text = total.ToString();
+                MessageBox.Show("Hata: " + ex.Message);
             }
         }
 
         private async void btnPurchase_Click(object sender, EventArgs e)
         {
-            if (cmbStock.SelectedItem is not StockDto stock)
+            if (!int.TryParse(txtStockId.Text, out int stockId) || !int.TryParse(txtAmount.Text, out int amount))
             {
-                MessageBox.Show("Lütfen bir ürün seçin.");
+                MessageBox.Show("Lütfen geçerli bir ID ve miktar girin.");
                 return;
             }
 
-            int quantity = (int)numAmount.Value;
-
             var purchase = new
             {
-                StockId = stock.ID, // backend bu ID'ye göre eşleşip stok güncelleyecek
-                Amount = quantity
+                StockId = stockId,
+                Amount = amount
             };
 
             using var client = new HttpClient();
@@ -98,18 +75,28 @@ namespace BilnexDesktopApp
             var json = JsonSerializer.Serialize(purchase);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync("api/purchase", content);
+            var response = await client.PostAsync("api/purchases", content);
             if (response.IsSuccessStatusCode)
             {
-                int total = quantity * stock.Price;
-                dgvPurchases.Rows.Add(stock.Name, stock.Price, quantity, total);
                 MessageBox.Show("Satın alma başarılı.");
+
+                await LoadStocksAsync();
+
+                var selectedStock = ((List<StockDto>)dgvStockList.DataSource).Find(s => s.ID == stockId);
+                dgvHistory.Rows.Add(selectedStock.ID, selectedStock.Name, selectedStock.Price, amount, selectedStock.Price * amount);
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                MessageBox.Show("Satın alma başarısız:\n" + error);
+                MessageBox.Show("Satın alma başarısız.");
             }
+        }
+
+        public class StockDto
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public int Price { get; set; }
+            public int Amount { get; set; }
         }
     }
 }
