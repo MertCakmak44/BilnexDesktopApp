@@ -24,21 +24,21 @@
             lblStatus = new Label();
             SuspendLayout();
             // 
-            // label1 - Kullanıcı Adı
+            // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(12, 75);
             label1.Name = "label1";
-            label1.Size = new Size(80, 15);
+            label1.Size = new Size(76, 15);
             label1.TabIndex = 0;
             label1.Text = "Kullanıcı Adı:";
             // 
-            // label2 - Şifre
+            // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(12, 129);
             label2.Name = "label2";
-            label2.Size = new Size(35, 15);
+            label2.Size = new Size(33, 15);
             label2.TabIndex = 1;
             label2.Text = "Şifre:";
             // 
@@ -100,6 +100,7 @@
             Controls.Add(label1);
             Name = "Form1";
             Text = "Bilnex Giriş Paneli";
+            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }

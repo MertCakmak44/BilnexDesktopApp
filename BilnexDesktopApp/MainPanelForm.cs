@@ -22,8 +22,6 @@ namespace BilnexDesktopApp
             {
                 button4.Visible = false;
             }
-
-
             // Olay bağlamaları
             button1.Click += (s, e) =>
             {
@@ -45,9 +43,11 @@ namespace BilnexDesktopApp
 
             button4.Click += (s, e) =>
             {
-                MessageBox.Show("AdminPanelForm açılacak");
+                var adminForm = new AdminPanelForm(_token);
+                adminForm.ShowDialog();
             };
-            button5.Click += (s, e) => {
+            button5.Click += (s, e) =>
+            {
                 var purchaseForm = new PurchaseForm(_token); // _token değişkeni varsa onu geçir
                 purchaseForm.ShowDialog();
             };

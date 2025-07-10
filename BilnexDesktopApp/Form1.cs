@@ -101,7 +101,7 @@ namespace BilnexDesktopApp
                         // Rolü token içinden oku
                         var handler = new JwtSecurityTokenHandler();
                         var jwt = handler.ReadJwtToken(token);
-                        string role = jwt.Claims.FirstOrDefault(c => c.Type == "role")?.Value ?? "user";
+                        string role = jwt.Claims.FirstOrDefault(c => c.Type.EndsWith("role"))?.Value ?? "user";
 
                         lblStatus.Text = "✅ Giriş başarılı!";
                         MessageBox.Show("Giriş başarılı! Token alınmıştır.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -125,5 +125,10 @@ namespace BilnexDesktopApp
 
         private void label2_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
